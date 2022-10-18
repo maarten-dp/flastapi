@@ -1,0 +1,46 @@
+language: python
+
+python:
+  - 3.10.5
+
+install:
+  - pip install -U pip wheel
+  - pip install -U -r requirements-dev.txt
+  - pip install .
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+stages:
+  - test
+  - linter
+  - name: deploy
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: test
+      name: "Tests"
+      script: pytest --cov-report=term-missing --cov=flaskapi
+      after_success:
+        - codecov
+
+    - stage: linter
+      name: "Linter"
+      script: pre-commit run --all-files --show-diff-on-failure
+    - stage: deploy
+      script: skip
+      before_install: skip
+      install: skip
+      deploy:
+        skip_cleanup: true
+        provider: pypi
+        distributions: sdist bdist_wheel
+        user: maartendp
+        on:
+          tags: true
+          repo: maarten-dp/flaskapi
+          python: 3.10.5
+        password:
+          secure: uqSRE1tYl8YMiQDaG63aQanamlixoY09Mm38FDR448nnTIt1UBp4UuBcpeQg2zEIZP5mS15Z/6DidqTL6QJg97k7O8NhC3oVnmnX+mloj79YkSv9MphutARW6eP7JV4KhO6AL5Tcf710aaq0lElfiKUkxCh0qYNOG/zV1y8RHebfu3dDYMXh4ubNJ5TLU3ZEOCK+8fP1oEaIfoZjxes36drWePQiZhXfLP820Q4a8MOBwhpcxVwQjq5thCww3sAv9stFNtol+zh0kL2evd/HpzlyEisDgXedSUPDd3YcZQ5eJzVmtmQX+TbYfXrYbKR2UKNvHfurcMO1HAGYA0a67jL5tKQhlW3itIllSkDt7rDgsC3s19eMjfETxa3X1xvXqjtDF6+0AjKoM7l8yuE72VVTYG0Cw8ftEym1Ewv/6Jj6Iv+591Y/rVF+RGWwP/6kiBWOIJYYmbIWXB5s3ydOWEbIdU3F2Vk+q5H0wsfxdU5Duvg2KlBGh+2+yAl3GQGKUn5Ikl1fnE71eH0NzGkkmeolsNACy8MCOTgNWAFr7FcxU3pxt8z6KraXcMoaKWdgk9f2ARpDCjaqxQNllvdma6jjJ5263rdHa75QfLxEEo8JOLeh7pFposUAGE5MWKeydrz5ydU3nVqQiDR9Sm7Uw9rS3nW0OoL2GeaqF0OK/Dg=

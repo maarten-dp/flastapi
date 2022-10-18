@@ -1,0 +1,16 @@
+[run]
+branch = True
+source = flaskapi
+omit =
+  */.env/*,
+  *apps.py,
+  *migrations/*,
+  *settings*,
+  *tests/*,
+  *wsgi.py,
+  */manage.py,
+  launch.py,
+  setup.py,
+
+[report]
+ignore_errors = True
