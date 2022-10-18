@@ -40,7 +40,7 @@ router = Router("my_router")
 
 @router.get("/index"):
 def index():
-	return {}
+    return {}
 
 flaskapi.add_router(router)
 
@@ -57,7 +57,7 @@ In short: We'll stick to flask path notations :)
 ```python
 @router.get("/test/<int:some_param>")
 def index(some_param: int):
-	return {"some_param": some_param}
+    return {"some_param": some_param}
 ```
 ### Example call
 ```python
@@ -72,7 +72,7 @@ Parameters annotated with builtin base types will automatically be flagged as qu
 ```python
 @router.get("/test")
 def index(some_param: int):
-	return {"some_param": some_param}
+    return {"some_param": some_param}
 ```
 ### Example call
 ```python
@@ -86,12 +86,12 @@ Parameters annotated with pydantic models will automatically be flagged as json 
 ### Example endpoint
 ```python
 class SomeParam(BaseModel):
-	some_int: int
+    some_int: int
 
 
 @router.post("/test")
 def index(some_param: SomeParam):
-	return some_param
+    return some_param
 ```
 ### Example call
 ```python
@@ -105,22 +105,22 @@ It's possible to annotate multiple pydantic models. If this is the case, the par
 ### Example endpoint
 ```python
 class SomeParam(BaseModel):
-	some_int: int
+    some_int: int
 
 
 class AnotherParam(BaseModel):
-	some_str: str
+    some_str: str
 
 
 @router.post("/test")
 def index(some_param: SomeParam, another_param: AnotherParam):
-	return [SomeParam, AnotherParam]
+    return [SomeParam, AnotherParam]
 ```
 ### Example call
 ```python
 >>> client.post("/test", json={
-	"some_param": {"some_int": 1},
-	"another_param": {"some_str": "blah"}
+    "some_param": {"some_int": 1},
+    "another_param": {"some_str": "blah"}
 })
 [{"some_int": 1}, {"some_str": "blah"}]
 ```
@@ -133,12 +133,12 @@ from flaskapi import Depends
 
 
 class SomeParam(BaseModel):
-	some_int: int
+    some_int: int
 
 
 @router.get("/test")
 def index(some_param: SomeParam = Depends(SomeParam)):
-	return some_param
+    return some_param
 ```
 ### Example call
 ```python
@@ -154,14 +154,14 @@ from flaskapi import Depends
 
 
 def get_session():
-	engine = create_engine("sqlite:////tmp/some.db")
-	with Session(engine) as session:
-		yield session
+    engine = create_engine("sqlite:////tmp/some.db")
+    with Session(engine) as session:
+        yield session
 
 
 @router.get("/test")
 def index(session: Session = Depends(get_session)):
-	return {}
+    return {}
 ```
 
 # Testing dependencies
@@ -174,14 +174,14 @@ from flaskapi import Depends
 
 
 def get_session():
-	engine = create_engine("sqlite:////tmp/some.db")
-	with Session(engine) as session:
-		yield session
+    engine = create_engine("sqlite:////tmp/some.db")
+    with Session(engine) as session:
+        yield session
 
 
 @my_router.get("/test")
 def index(session: Session = Depends(get_session)):
-	return {}
+    return {}
 ```
 
 ### Tests
@@ -193,18 +193,18 @@ from my_project import get_session, my_router
 
 
 def get_test_session():
-	engine = create_engine("sqlite:////tmp/another.db")
-	with Session(engine) as session:
-		yield session
+    engine = create_engine("sqlite:////tmp/another.db")
+    with Session(engine) as session:
+        yield session
 
 
 @pytest.fixture
 def app():
-	app = Flask(__name__)
-	flaskapi = FlaskAPI()
-	flaskapi.add_router(my_router)
+    app = Flask(__name__)
+    flaskapi = FlaskAPI()
+    flaskapi.add_router(my_router)
 
-	flaskapi.dependency_overrides[get_session] = get_test_session
+    flaskapi.dependency_overrides[get_session] = get_test_session
 ```
 
 ## Using requests as test client
