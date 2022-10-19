@@ -49,7 +49,7 @@ class Dependency:
 	def get_value(self, *args, **kwargs):
 		dependency = self
 		if current_app:
-			overrides = current_app.extensions["flaskapi"].dependency_overrides
+			overrides = current_app.extensions["flastapi"].dependency_overrides
 			candidate = overrides.get(self.dependency)
 			if candidate:
 				dependency = Depends(candidate)

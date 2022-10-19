@@ -4,7 +4,7 @@ import pytest
 from flask import Flask
 from pydantic import BaseModel
 
-from flaskapi import FlaskAPI, Router, Depends
+from flastapi import FlastAPI, Router, Depends
 
 
 @pytest.fixture
@@ -15,40 +15,40 @@ def app():
 
 
 @pytest.fixture
-def flaskapi(app):
-	return FlaskAPI(app)
+def flastapi(app):
+	return FlastAPI(app)
 
 
 def test_it_can_register_routes_before_init_app():
 	app = Flask(__name__)
-	flaskapi = FlaskAPI()
+	flastapi = FlastAPI()
 	router = Router("test_router")
 
 	@router.get("/test")
 	def test():
 		pass
 
-	flaskapi.add_router(router)
-	flaskapi.init_app(app)
+	flastapi.add_router(router)
+	flastapi.init_app(app)
 
 	assert "/test" in [r.rule for r in app.url_map.iter_rules()]
 
 
 def test_it_can_register_routes_after_init_app():
 	app = Flask(__name__)
-	flaskapi = FlaskAPI(app)
+	flastapi = FlastAPI(app)
 	router = Router("test_router")
 
 	@router.get("/test")
 	def test():
 		pass
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	assert "/test" in [r.rule for r in app.url_map.iter_rules()]
 
 
-def test_it_can_handle_a_path_request(app, flaskapi):
+def test_it_can_handle_a_path_request(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -57,7 +57,7 @@ def test_it_can_handle_a_path_request(app, flaskapi):
 		canary(some_param)
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -66,7 +66,7 @@ def test_it_can_handle_a_path_request(app, flaskapi):
 	canary.assert_called_once_with(1)
 
 
-def test_it_can_handle_a_query_request(app, flaskapi):
+def test_it_can_handle_a_query_request(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -75,7 +75,7 @@ def test_it_can_handle_a_query_request(app, flaskapi):
 		canary(some_param)
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -84,7 +84,7 @@ def test_it_can_handle_a_query_request(app, flaskapi):
 	canary.assert_called_once_with(1)
 
 
-def test_it_can_handle_a_body_request(app, flaskapi):
+def test_it_can_handle_a_body_request(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -96,7 +96,7 @@ def test_it_can_handle_a_body_request(app, flaskapi):
 		canary(**some_param.dict())
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -105,7 +105,7 @@ def test_it_can_handle_a_body_request(app, flaskapi):
 	canary.assert_called_once_with(some_int=1)
 
 
-def test_it_can_handle_a_multi_body_request(app, flaskapi):
+def test_it_can_handle_a_multi_body_request(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -120,7 +120,7 @@ def test_it_can_handle_a_multi_body_request(app, flaskapi):
 		canary(**some_param.dict(), **another_param.dict())
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -136,7 +136,7 @@ def test_it_can_handle_a_multi_body_request(app, flaskapi):
 	canary.assert_called_once_with(some_int=1, some_str="test")
 
 
-def test_it_can_handle_a_dependency_request(app, flaskapi):
+def test_it_can_handle_a_dependency_request(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -148,7 +148,7 @@ def test_it_can_handle_a_dependency_request(app, flaskapi):
 		canary(some_param)
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -157,7 +157,7 @@ def test_it_can_handle_a_dependency_request(app, flaskapi):
 	canary.assert_called_once_with(some_dependency())
 
 
-def test_it_can_handle_all_request_params(app, flaskapi):
+def test_it_can_handle_all_request_params(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -177,7 +177,7 @@ def test_it_can_handle_all_request_params(app, flaskapi):
 		canary(path_param, query_param, some_dep, **body_param.dict())
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -188,7 +188,7 @@ def test_it_can_handle_all_request_params(app, flaskapi):
 
 
 # TODO: Fix this =)
-# def test_it_can_decorate_multiple_methods(app, flaskapi):
+# def test_it_can_decorate_multiple_methods(app, flastapi):
 # 	router = Router("test_router")
 # 	canary = mock.Mock()
 
@@ -198,7 +198,7 @@ def test_it_can_handle_all_request_params(app, flaskapi):
 # 		canary(method)
 # 		return {}
 
-# 	flaskapi.add_router(router)
+# 	flastapi.add_router(router)
 
 # 	with app.app_context():
 # 		with app.test_client() as client:
@@ -209,7 +209,7 @@ def test_it_can_handle_all_request_params(app, flaskapi):
 # 	canary.assert_called_once_with("post")
 
 
-def test_it_can_override_dependencies(app, flaskapi):
+def test_it_can_override_dependencies(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -227,8 +227,8 @@ def test_it_can_override_dependencies(app, flaskapi):
 		canary(some_dep)
 		return {}
 
-	flaskapi.add_router(router)
-	flaskapi.dependency_overrides[some_dependency] = another_dependency
+	flastapi.add_router(router)
+	flastapi.dependency_overrides[some_dependency] = another_dependency
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -238,7 +238,7 @@ def test_it_can_override_dependencies(app, flaskapi):
 	canary.assert_called_once_with(another_dependency())
 
 
-def test_it_can_close_a_context_depencency(app, flaskapi):
+def test_it_can_close_a_context_depencency(app, flastapi):
 	router = Router("test_router")
 	canary = mock.Mock()
 
@@ -254,7 +254,7 @@ def test_it_can_close_a_context_depencency(app, flaskapi):
 		canary.close.assert_not_called()
 		return {}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -264,14 +264,14 @@ def test_it_can_close_a_context_depencency(app, flaskapi):
 	canary.close.assert_called_once()
 
 
-def test_it_can_handle_dict_return_value(app, flaskapi):
+def test_it_can_handle_dict_return_value(app, flastapi):
 	router = Router("test_router")
 
 	@router.get("/test")
 	def test():
 		return {"some_int": 1}
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -280,7 +280,7 @@ def test_it_can_handle_dict_return_value(app, flaskapi):
 	assert payload.json == {"some_int": 1}
 
 
-def test_it_can_handle_pydantic_return_value(app, flaskapi):
+def test_it_can_handle_pydantic_return_value(app, flastapi):
 	router = Router("test_router")
 
 	class BodyParam(BaseModel):
@@ -290,7 +290,7 @@ def test_it_can_handle_pydantic_return_value(app, flaskapi):
 	def test():
 		return BodyParam(some_int=1)
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:
@@ -299,7 +299,7 @@ def test_it_can_handle_pydantic_return_value(app, flaskapi):
 	assert payload.json == {"some_int": 1}
 
 
-def test_it_can_handle_nested_pydantic_return_value(app, flaskapi):
+def test_it_can_handle_nested_pydantic_return_value(app, flastapi):
 	router = Router("test_router")
 
 	class BodyParam(BaseModel):
@@ -309,7 +309,7 @@ def test_it_can_handle_nested_pydantic_return_value(app, flaskapi):
 	def test():
 		return [{"model": BodyParam(some_int=1)}]
 
-	flaskapi.add_router(router)
+	flastapi.add_router(router)
 
 	with app.app_context():
 		with app.test_client() as client:

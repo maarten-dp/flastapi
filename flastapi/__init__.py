@@ -2,7 +2,7 @@ from .routing import Router
 from .signature import Depends
 
 
-class FlaskAPI:
+class FlastAPI:
 	def __init__(self, app=None):
 		self.app = None
 		self.deferred_routers = []
@@ -14,7 +14,7 @@ class FlaskAPI:
 		self.app = app
 		if not hasattr(app, "extensions"):
 			app.extensions = {}
-		app.extensions["flaskapi"] = self
+		app.extensions["flastapi"] = self
 		for router in self.deferred_routers:
 			self._add_router(router)
 

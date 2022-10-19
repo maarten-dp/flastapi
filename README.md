@@ -18,7 +18,7 @@
 
 # Introduction
 
-Flaskapi is a small flask plugin to enable a Fastapi-like interface to build API endpoints using pydantic.
+Flastapi is a small flask plugin to enable a Fastapi-like interface to build API endpoints using pydantic.
 
 Current features are:
 - path parameters using flask paths
@@ -27,22 +27,22 @@ Current features are:
 - depends (including context dependencies)
 - dependency_overrides
 
-Fastapi did a great job at integrating pydantic, as a marshaller for API endpoints, in an intuitive way. With this library I wanted to expose these capabilities in flask as well, for those who haven't found the ability to transition to newer techs (Or those who have a hard time dealing with change ;) )
+Fastapi did a great job at integrating pydantic, as a marshaller for API endpoints, in an intuitive way. With this library I wanted to expose these capabilities in flast as well, for those who haven't found the ability to transition to newer techs (Or those who have a hard time dealing with change ;) )
 
 # Quickstart
 ```python
 from flask import Flask
-from flaskapi import FlaskAPI, Router
+from flastapi import FlastAPI, Router
 
 app = Flask(__name__)
-flaskapi = FlaskAPI(app)
+flastapi = FlastAPI(app)
 router = Router("my_router")
 
 @router.get("/index"):
 def index():
     return {}
 
-flaskapi.add_router(router)
+flastapi.add_router(router)
 
 app.run()
 ```
@@ -129,7 +129,7 @@ def index(some_param: SomeParam, another_param: AnotherParam):
 If you'd like to group your query parameters in a pydantic model (or load them through another function), you can use a dependency.
 
 ```python
-from flaskapi import Depends
+from flastapi import Depends
 
 
 class SomeParam(BaseModel):
@@ -150,7 +150,7 @@ def index(some_param: SomeParam = Depends(SomeParam)):
 A dependency also supports contexts, if you'd like a context to be started before handling the request, and closed after the request is handled.
 
 ```python
-from flaskapi import Depends
+from flastapi import Depends
 
 
 def get_session():
@@ -170,7 +170,7 @@ You can override dependencies for your unit tests by replacing the wanted depend
 
 ### Code
 ```python
-from flaskapi import Depends
+from flastapi import Depends
 
 
 def get_session():
@@ -187,7 +187,7 @@ def index(session: Session = Depends(get_session)):
 ### Tests
 ```python
 from pytest import fixture
-from flaskapi import FlaskAPI
+from flastapi import FlastAPI
 
 from my_project import get_session, my_router
 
@@ -201,10 +201,10 @@ def get_test_session():
 @pytest.fixture
 def app():
     app = Flask(__name__)
-    flaskapi = FlaskAPI()
-    flaskapi.add_router(my_router)
+    flastapi = FlastAPI()
+    flastapi.add_router(my_router)
 
-    flaskapi.dependency_overrides[get_session] = get_test_session
+    flastapi.dependency_overrides[get_session] = get_test_session
 ```
 
 ## Using requests as test client

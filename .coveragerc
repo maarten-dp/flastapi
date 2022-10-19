@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = flaskapi
+source = flastapi
 omit =
   */.env/*,
   *apps.py,

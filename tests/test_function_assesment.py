@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 from pydantic import BaseModel
 from pydantic.error_wrappers import ValidationError
-from flaskapi.signature import (
+from flastapi.signature import (
 	parse_signature, QueryParameter, BodyParameter, Depends, Dependency
 )
 
