@@ -316,3 +316,27 @@ def test_it_can_handle_nested_pydantic_return_value(app, flastapi):
 			payload = client.get("/test")
 
 	assert payload.json == [{"model": {"some_int": 1}}]
+
+
+def test_it_can_handle_a_malformed_requests(app, flastapi):
+	router = Router("test_router")
+
+	class BodyParam(BaseModel):
+		some_int: int
+
+	@router.get("/test")
+	def test(some_param: BodyParam):
+		return {}
+
+	flastapi.add_router(router)
+
+	with app.app_context():
+		with app.test_client() as client:
+			response = payload = client.get("/test")
+
+	assert response.status_code == 400
+	assert response.json == [{
+		'loc': ['json', 'some_param'],
+		'msg': 'Malformed request. Must be application/json',
+		'type': 'value_error.missing'
+	}]
