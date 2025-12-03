@@ -27,7 +27,7 @@ Current features are:
 - depends (including context dependencies)
 - dependency_overrides
 
-Fastapi did a great job at integrating pydantic, as a marshaller for API endpoints, in an intuitive way. With this library I wanted to expose these capabilities in flast as well, for those who haven't found the ability to transition to newer techs (Or those who have a hard time dealing with change ;) )
+Fastapi did a great job at integrating pydantic, as a marshaller for API endpoints, in an intuitive way. With this library I wanted to expose these capabilities in flask as well, for those who haven't found the ability to transition to newer techs (Or those who have a hard time dealing with change ;) )
 
 # Quickstart
 ```python
